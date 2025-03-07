@@ -1,0 +1,296 @@
+//8.3
+
+#include <stdio.h>
+#include <stdlib.h>
+int main(void)
+{
+    int n, m;
+    int  ** a = NULL;
+    scanf("%d%d", &n, &m);
+    a = malloc(m * sizeof(int * ));
+    if(a == NULL)
+    {
+        perror("alocare");
+        exit(1);
+    }
+    for(int i = 0; i < m; i++)
+    {
+        a[i] = malloc(n * sizeof(int));
+        if(a[i] == NULL)
+        {
+            perror("alocare");
+            exit(1);
+        }
+    }
+    int cnt = 0;
+    for(int i = 0; i < m; i++)
+        for(int j = 0; j < n; j++)
+        {
+            cnt++;
+            a[i][j] = cnt;
+        }
+    for(int i = 0; i < m; i++)
+    {
+        for(int j = 0; j < n; j++)
+            printf("%3d", a[i][j]);
+        printf("\n");
+    }
+    return 0;
+}
+
+//8.4
+
+#include <stdio.h>
+#include <stdlib.h>
+int main(void)
+{
+    int n;
+    int  ** a = NULL;
+    scanf("%d", &n);
+    a = malloc(n * sizeof(int * ));
+    if(a == NULL)
+    {
+        perror("alocare");
+        exit(1);
+    }
+    for(int i = 0; i < n; i++)
+    {
+        a[i] = malloc(n * sizeof(int));
+        if(a[i] == NULL)
+        {
+            perror("alocare");
+            exit(1);
+        }
+    }
+    for(int i = 0; i < n; i++)
+        for(int j = 0; j < n; j++)
+            scanf("%d", &a[i][j]);
+    for(int i = 0; i < n; i++)
+        for(int j = i + 1; j < n; j++)
+        {
+            int aux = a[i][j];
+            a[i][j] = a[j][i];
+            a[j][i] = aux;
+        }
+
+    for(int i = 0; i < n; i++)
+    {
+        for(int j = 0; j < n; j++)
+            printf("%3d", a[i][j]);
+        printf("\n");
+    }
+    return 0;
+}
+
+//8.5
+
+#include <stdio.h>
+#include <stdlib.h>
+int main(void)
+{
+    int n;
+    int  ** a = NULL;
+    scanf("%d", &n);
+    a = malloc(n * sizeof(int * ));
+    if(a == NULL)
+    {
+        perror("alocare");
+        exit(1);
+    }
+    for(int i = 0; i < n; i++)
+    {
+        a[i] = malloc(n * sizeof(int));
+        if(a[i] == NULL)
+        {
+            perror("alocare");
+            exit(1);
+        }
+    }
+    for(int i = 0; i < n; i++)
+        for(int j = 0; j < n; j++)
+            scanf("%d", &a[i][j]);
+    int *sum_lin;
+    int *sum_col;
+    sum_lin = malloc(n * sizeof(int));
+    sum_col = malloc(n * sizeof(int));
+    if(sum_lin == NULL || sum_col == NULL)
+    {
+        perror("alocare");
+        exit(1);
+    }
+
+    for(int i = 0; i < n; i++)
+    {
+        int s = 0;
+        for(int j = 0; j < n; j++)
+            s += a[i][j];
+        sum_lin[i] = s;
+    }
+    for(int j = 0; j < n; j++)
+    {
+        int s = 0;
+        for(int i = 0; i < n; i++)
+            s += a[i][j];
+        sum_col[j] = s;
+    }
+
+    for(int i = 0; i < n; i++)
+        printf("Linia %d are suma: %d\n", i, sum_lin[i]);
+    for(int i = 0; i < n; i++)
+        printf("Coloana %d are suma: %d\n", i, sum_col[i]);
+
+    return 0;
+}
+
+//8.6
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+int main(void)
+{
+    int n;
+    scanf("%d ", &n);
+    int a[20][20];
+    for(int i = 0; i < n; i++)
+    {
+        char b[200];
+        fgets(b, 200, stdin);
+        char *p = strtok(b, " ");
+        int nr = 0;
+        while(p != NULL)
+        {
+            nr++;
+            p = strtok(NULL, " ");
+        }
+        printf("Persoana %d are %d prieteni \n", i, nr);
+    }
+   /* for(int i = 0; i < n; i++)
+    {
+        for(int j = 0; j < n; j++)
+            printf("%3d", a[i][j]);
+        printf("\n");
+    }*/
+    return 0;
+}
+
+//8.7
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+int main(void)
+{
+    int n, a[20][20];
+    scanf("%d", &n);
+    int min;
+    for(int i = 0; i < n; i++)
+        for(int j = 0; j < n; j++)
+        {
+            scanf("%d", &a[i][j]);
+            if(a[i][j])
+                min = a[i][j];
+        }
+    int p1, p2;
+    for(int i = 0; i < n; i++)
+        for(int j = 0; j < n; j++)
+            if(a[i][j] < min && a[i][j])
+            {
+                min = a[i][j];
+                p1 = i;
+                p2 = j;
+            }
+    printf("orasele cele mai apropiate sunt %d si %d", p1, p2);
+   /* for(int i = 0; i < n; i++)
+    {
+        for(int j = 0; j < n; j++)
+            printf("%3d", a[i][j]);
+        printf("\n");
+    }*/
+    return 0;
+}
+
+//8.8
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+int main(void)
+{
+    int m, n, p;
+    scanf("%d%d%d", &m, &n, &p);
+    int a[20][20], b[20][20], c[20][20];
+    // a mn , b np
+    for(int i = 0; i < m; i++)
+        for(int j = 0; j < n; j++)
+            scanf("%d", &a[i][j]);
+    for(int i = 0; i < n; i++)
+        for(int j = 0; j < p; j++)
+            scanf("%d", &b[i][j]);
+    for(int i = 0; i < m; i++)
+        for(int j = 0; j < p; j++)
+        {
+            int s = 0;
+            for(int k = 0; k < n; k++)
+            {
+                s = s + a[i][k] * b[k][j];
+            }
+            c[i][j] = s;
+        }
+    for(int i = 0; i < m; i++)
+    {
+        for(int j = 0; j < p; j++)
+            printf("%3d", c[i][j]);
+        printf("\n");
+    }
+    return 0;
+}
+
+//8.9
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+int a[50][50];
+int main(void)
+{
+    int n;
+    scanf("%d", &n);
+    for(int i = 0; i < n; i++)
+        for(int j = 0; j < n; j++)
+            if(i == j || (i + j) == n - 1)
+                a[i][j] = 1;
+    for(int i = 0; i < n; i++)
+    {
+        for(int j = 0; j < n; j++)
+            printf("%3d", a[i][j]);
+        printf("\n");
+    }
+    return 0;
+}
+
+//8.10
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main(void)
+{
+    int n, a[100][4];
+    scanf("%d", &n);
+    for(int i = 0; i < n; i++)
+        for(int j = 0; j < 4; j++)
+            scanf("%d", &a[i][j]);
+    for(int i = 0; i < n; i++)
+    {
+        int ok = 1;
+        for(int j = 0; j < 3; j++)
+            if(a[i][j] > a[i][j + 1])
+                ok = 0;
+        if(ok)
+            printf("produsul %d a inregistrat o crestere continua a vanzarilor\n", i);
+    }
+    return 0;
+}
+
