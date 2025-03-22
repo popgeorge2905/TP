@@ -1,0 +1,230 @@
+//2.1
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct {
+    char nume[40];
+    int nota;
+}student;
+
+student s[1000];
+int n;
+
+int cmp(const void *val1, const void *val2)
+{
+    const student *s1 = (const student *)val1;
+    const student *s2 = (const student *)val2;
+    if(s1 -> nota < s2 -> nota)
+        return 1;
+    if(s1 -> nota > s2 -> nota)
+        return -1;
+    return strcmp(s1 -> nume, s2 -> nume);
+}
+
+int main()
+{
+    scanf("%d ", &n);
+    char aux[40];
+    for(int i = 0; i < n; i++)
+    {
+
+        fgets(aux, 40, stdin);
+        aux[strcspn(aux, "\n")] = 0;
+        strcpy(s[i].nume, aux);
+        scanf("%d", &s[i].nota);
+        if(i < n - 1)
+            getchar();
+    }
+    qsort(s, n, sizeof(student), cmp);
+    for(int i = 0; i < n; i++)
+    {
+        printf("Nume: %s Nota: %d\n", s[i].nume, s[i].nota);
+    }
+
+}
+
+//2.2
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+
+int negativ(int x)
+{
+    return x < 0;
+}
+
+void stergere(int * a, int * size, int(*cond)(int))
+{
+    int i = 0;
+    do
+    {
+        if(cond(a[i]))
+        {
+            for(int j = i; j < size - 1; j++)
+                a[i] = a[i + 1];
+            *size = *size - 1;
+        }
+        else
+            i++;
+    }while(i <= *size - 1);
+}
+
+int main()
+{
+    int a[100], n;
+    scanf("%d", &n);
+    for(int i = 0; i < n; i++)
+        scanf("%d", &a[i]);
+    stergere(a, &n, negativ);
+    for(int i = 0; i < n; i++)
+        printf("%d ", a[i]);
+}
+
+//2.3
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int cmp(const void *el1, const void *el2)
+{
+    const float*f1 = (const float *) el1;
+    const float*f2 = (const float *) el2;
+    if(*f1 > *f2)
+        return 1;
+    if(*f1 < *f2)
+        return -1;
+    return 0;
+}
+
+int main()
+{
+    int n;
+    float a[20];
+    scanf("%d", &n);
+    for(int i = 0; i < n; i++)
+        scanf("%f", &a[i]);
+    qsort(a, n, sizeof(float),  cmp);
+    for(int i = 0; i < n; i++)
+        printf("%f ", a[i]);
+    printf("\n");
+    float x;
+    scanf("%f", &x);
+    int *ptr = bsearch(&x, a, n, sizeof(float), cmp);
+    if(ptr == NULL)
+        printf("NU a fost gasit elementul in vector!");
+    else
+        printf("Elementul a fost gasit in vector!");
+}
+
+//2.4
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
+
+
+void tabelare(double a, double b, int n, double(*func)(double))
+{
+    double pas = (b - a) / n;
+    for(double i = a; i <= b; i += pas)
+        printf("f(%f) = %f\n", i, func(i));
+}
+
+int main()
+{
+    tabelare(-10, 10, 20, sqrt);
+}
+
+//Subiectul 2.1
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
+
+
+int f1(int x)
+{
+    return (x * x * x + 4) / (x * x + 5);
+}
+int f2(int x)
+{
+    return x + 10;
+}
+int f3(int x)
+{
+    return 2 * x * x - 1;
+}
+
+void tabelare(int a, int b, int p, int(*func)(int))
+{
+
+    for(int i = a; i <= b; i += p)
+        printf("f(%d) = %d\n", i, func(i));
+}
+
+int main()
+{
+    int a, b, p;
+    scanf("%d%d%d", &a, &b, &p);
+    printf("tabelare f1 - (x * x * x + 4) / (x * x + 5) \n");
+    tabelare(a, b, p, f1);
+    printf("tabelare f2 - x + 10 \n");
+    tabelare(a, b, p, f2);
+    printf("tabelare f3 - 2 * x * x - 1 \n");
+    tabelare(a, b, p, f3);
+}
+
+//Subiectul 2.2
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+
+int f1(char * s)
+{
+    return strlen(s);
+}
+int f2(char * s)
+{
+    char v[] = "aeiou";
+    int nr = 0;
+    for(int i = 0; i < strlen(s); i++)
+        if(strchr(v, s[i]) != NULL)
+            nr++;
+    return nr;
+}
+int f3(char * s)
+{
+    int nr = 0;
+    for(int i = 0; i < strlen(s); i++)
+        if(isupper(s[i]))
+            nr++;
+    return nr;
+}
+int f4(char * s)
+{
+    return s[strlen(s) - 1] - s[0];
+}
+
+int main(int argc, char ** argv)
+{
+    int (*operatii[4])(char*) = {f1, f2, f3, f4};
+
+    for(int i = 1; i < argc; i++)
+    {
+        printf("%s ", argv[i]);
+        for(int j = 0; j < 4; j++)
+            printf("%d ", operatii[j](argv[i]));
+        printf("\n");
+    }
+    return 0;
+}
+
