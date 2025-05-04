@@ -1,0 +1,119 @@
+//3.1
+#include <stdio.h>
+#include <stdlib.h>
+#define max 100
+
+int a[max], top = -1;
+
+void push(int x)
+{
+    if(top + 1 <= max - 1)
+    {
+        a[++top] = x;
+    }
+    else
+    {
+        printf("stiva este plina!");
+        exit(1);
+    }
+}
+int pop()
+{
+    if(top == -1)
+    {
+        printf("stiva este goala!");
+        return;
+    }
+    else
+    {
+        top--;
+        return a[top + 1];
+    }
+}
+void display()
+{
+    if(top == -1)
+    {
+        printf("stiva este goala!");
+    }
+    else
+    {
+        for(int i = top; i >= 0; i--)
+            printf("%d ", a[i]);
+        printf("\n");
+    }
+}
+
+int main()
+{
+    push(10);
+    push(20);
+    push(30);
+    display();
+    printf("Elementul extras din stiva: %d\n",pop());
+    display();
+    return 0;
+}
+
+//3.2
+#include <stdio.h>
+#include <stdlib.h>
+#define max 100
+
+int a[max], front = -1, rear = -1;
+
+void enqueue(int x)
+{
+    if(rear + 1 <= max - 1)
+    {
+        if(front == -1)
+            front++;
+        a[++rear] = x;
+    }
+    else
+    {
+        printf("coada este plina");
+    }
+}
+
+int dequeue()
+{
+    if(front > rear || front  == -1)
+    {
+        printf("coada este goala");
+        return;
+    }
+    else
+    {
+        front++;
+        return a[front - 1];
+
+    }
+
+}
+
+void display()
+{
+    if(front > rear || front  == -1)
+    {
+        printf("coada este goala");
+    }
+    else
+    {
+        for(int i = front; i <= rear; i++)
+            printf("%d ", a[i]);
+        printf("\n");
+    }
+}
+
+int main()
+{
+    enqueue(10);
+    enqueue(20);
+    enqueue(30);
+    display();
+    printf("Elementul extras din coada: %d\n",dequeue());
+    display();
+    return 0;
+}
+
