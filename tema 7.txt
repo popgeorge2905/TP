@@ -1,0 +1,646 @@
+#7.1
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct nod
+{
+    int nr;
+    struct nod * urm;
+}nod;
+
+
+typedef struct {
+    nod *p;
+    nod *u;
+}lista;
+
+void init(lista *l)
+{
+    l -> p = NULL;
+    l -> u = NULL;
+}
+
+void adaugare_final(lista *l, int n)
+{
+    nod * e = malloc(sizeof(nod));
+    if(e == NULL)
+    {
+        perror("Alocare");
+        exit(1);
+    }
+    e -> nr = n;
+    e -> urm = NULL;
+    if(l -> u == NULL)
+    {
+        l -> p = e;
+        l -> u = e;
+    }
+    else
+    {
+        l -> u -> urm = e;
+        l -> u = e;
+    }
+}
+
+void adaugare_inceput(lista * l, int n)
+{
+    nod * e = malloc(sizeof(nod));
+    if(e == NULL)
+    {
+        perror("Alocare");
+        exit(1);
+    }
+    e -> nr = n;
+    e -> urm = NULL;
+    if(l -> p == NULL)
+    {
+        l -> p = e;
+        l -> u = e;
+    }
+    else
+    {
+        e -> nr = n;
+        e -> urm = l -> p;
+        l -> p = e;
+    }
+}
+
+void eliberare(lista * l)
+{
+    nod * prim = l -> p;
+    nod * prim1;
+    while(prim1 != NULL)
+    {
+        prim1 = prim -> urm;
+        free(prim);
+        prim = prim1;
+    }
+}
+
+void afisare(lista * l)
+{
+    for(nod * i = l -> p; i != NULL; i = i-> urm)
+        printf("%d\n", i -> nr);
+    printf("\n");
+}
+
+void stergere_inceput(lista * l)
+{
+    nod * aux = l -> p;
+    l -> p = l -> p -> urm;
+    free(aux);
+}
+void stergere_final(lista *l)
+{
+    nod * it = l -> p;
+    while(it -> urm != l -> u)
+    {
+        it = it -> urm;
+    }
+    it -> urm = NULL;
+    free(l -> u);
+    l -> u = it;
+}
+int compare(lista * l1, lista * l2)
+{
+    nod *i1;
+    nod *i2;
+    for(i1 = l1 -> p, i2 = l2 -> p; i1 != NULL && i2 != NULL; i1 = i1 -> urm, i2 = i2 -> urm)
+        if(i1 -> nr != i2 -> nr)
+            return 0;
+    if(i2 != NULL || i1 != NULL)
+        return 0;
+    return 1;
+}
+int main()
+{
+    lista l1, l2;
+    init(&l1);
+    init(&l2);
+    adaugare_final(&l1, 1);
+    adaugare_final(&l1, 2);
+    adaugare_final(&l1, 3);
+    adaugare_final(&l1, 4);
+    adaugare_final(&l2, 1);
+    adaugare_final(&l2, 2);
+    adaugare_final(&l2, 3);
+    adaugare_final(&l2, 4);
+    adaugare_final(&l2, 5);
+    printf("%d", compare(&l1, &l2));
+    return 0;
+}
+
+#7.2
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct nod
+{
+    int nr;
+    struct nod * urm;
+}nod;
+
+
+typedef struct {
+    nod *p;
+    nod *u;
+}lista;
+
+void init(lista *l)
+{
+    l -> p = NULL;
+    l -> u = NULL;
+}
+
+void adaugare_final(lista *l, int n)
+{
+    nod * e = malloc(sizeof(nod));
+    if(e == NULL)
+    {
+        perror("Alocare");
+        exit(1);
+    }
+    e -> nr = n;
+    e -> urm = NULL;
+    if(l -> u == NULL)
+    {
+        l -> p = e;
+        l -> u = e;
+    }
+    else
+    {
+        l -> u -> urm = e;
+        l -> u = e;
+    }
+}
+
+void adaugare_inceput(lista * l, int n)
+{
+    nod * e = malloc(sizeof(nod));
+    if(e == NULL)
+    {
+        perror("Alocare");
+        exit(1);
+    }
+    e -> nr = n;
+    e -> urm = NULL;
+    if(l -> p == NULL)
+    {
+        l -> p = e;
+        l -> u = e;
+    }
+    else
+    {
+        e -> nr = n;
+        e -> urm = l -> p;
+        l -> p = e;
+    }
+}
+
+void eliberare(lista * l)
+{
+    nod * prim = l -> p;
+    nod * prim1;
+    while(prim1 != NULL)
+    {
+        prim1 = prim -> urm;
+        free(prim);
+        prim = prim1;
+    }
+}
+
+void afisare(lista * l)
+{
+    for(nod * i = l -> p; i != NULL; i = i-> urm)
+        printf("%d\n", i -> nr);
+    printf("\n");
+}
+
+void stergere_inceput(lista * l)
+{
+    nod * aux = l -> p;
+    l -> p = l -> p -> urm;
+    free(aux);
+}
+void stergere_final(lista *l)
+{
+    nod * it = l -> p;
+    while(it -> urm != l -> u)
+    {
+        it = it -> urm;
+    }
+    it -> urm = NULL;
+    free(l -> u);
+    l -> u = it;
+}
+void reverse(lista * l)
+{
+    nod * var = l -> u;
+    int ok = 1;
+    while(ok)
+    {
+        ok = 0;
+        nod * it;
+        nod * ant;
+        for(it = l -> p; it != var; it = it -> urm)
+            if(it -> urm == var)
+            {
+                ok = 1;
+                ant = it;
+            }
+        var -> urm = ant;
+        var = ant;
+    }
+    nod * aux;
+    aux = l -> p;
+    l -> p = l -> u;
+    l -> u = aux;
+    l-> u -> urm = NULL;
+    return l;
+}
+int main()
+{
+    lista l1;
+    init(&l1);
+    adaugare_final(&l1, 1);
+    adaugare_final(&l1, 2);
+    adaugare_final(&l1, 3);
+    adaugare_final(&l1, 4);
+    afisare(&l1);
+    reverse(&l1);
+    afisare(&l1);
+    return 0;
+}
+
+#7.3
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct nod {
+    int nr;
+    struct nod * urm;
+}nod;
+
+
+typedef struct{
+    nod * p;
+    nod * u;
+}lista;
+
+
+void init(lista * l)
+{
+    l -> p = NULL;
+    l -> u = NULL;
+}
+
+void adauga(lista * l, int val)
+{
+    nod * e = malloc(sizeof(nod));
+    e -> nr = val;
+    e -> urm = NULL;
+    if(l -> p == NULL)
+    {
+        l -> p = e;
+        l -> u = e;
+    }
+    else
+    {
+        l -> u -> urm = e;
+        l -> u = e;
+    }
+}
+
+void afis(lista * l)
+{
+    nod * it;
+    for(it = l -> p; it != NULL; it = it -> urm)
+        printf("%d\n", it -> nr);
+    printf("\n");
+}
+int fr[10001];
+void combine(lista * l, lista * l1, lista * l2)
+{
+    // el pana la 10000;
+    init(l);
+    for(nod * it = l1 -> p; it != NULL; it = it -> urm)
+        if(fr[it -> nr] == 0)
+            fr[it -> nr] = 1;
+    for(nod * it = l2 -> p; it != NULL; it = it -> urm)
+        if(fr[it -> nr] == 0)
+            fr[it -> nr] = 1;
+    for(int i = 0; i <= 10000; i ++)
+        if(fr[i])
+            adauga(l, i);
+}
+
+
+int main()
+{
+    lista l1, l2, l;
+    init(&l1);
+    init(&l2);
+    adauga(&l1, 1);
+    adauga(&l1, 2);
+    adauga(&l1, 1);
+    adauga(&l1, 4);
+    adauga(&l2, 6);
+    adauga(&l2, 3);
+    adauga(&l2, 8);
+    adauga(&l2, 9);
+    combine(&l, &l1, &l2);
+    afis(&l);
+    return 0;
+}
+
+#7.5
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct nod {
+    int nr;
+    struct nod * urm;
+}nod;
+
+
+typedef struct{
+    nod * p;
+    nod * u;
+}lista;
+
+
+void init(lista * l)
+{
+    l -> p = NULL;
+    l -> u = NULL;
+}
+
+void adauga(lista * l, int val)
+{
+    nod * e = malloc(sizeof(nod));
+    e -> nr = val;
+    e -> urm = NULL;
+    if(l -> p == NULL)
+    {
+        l -> p = e;
+        l -> u = e;
+    }
+    else
+    {
+        l -> u -> urm = e;
+        l -> u = e;
+    }
+}
+
+void afis(lista * l)
+{
+    nod * it;
+    for(it = l -> p; it != NULL; it = it -> urm)
+        printf("%d\n", it -> nr);
+    printf("\n");
+}
+
+int verif(lista  * l1, lista  * l2)
+{
+    int ok = 1;
+    for(nod * i = l1 -> p; i != NULL; i = i -> urm)
+    {
+        int gasit = 0;
+        for(nod * j = l2 -> p; j != NULL; j = j -> urm)
+            if(i -> nr == j -> nr)
+                gasit = 1;
+        if(!gasit)
+            ok = 0;
+    }
+    for(nod * i = l2 -> p; i != NULL; i = i -> urm)
+    {
+        int gasit = 0;
+        for(nod * j = l1 -> p; j != NULL; j = j -> urm)
+            if(i -> nr == j -> nr)
+                gasit = 1;
+        if(!gasit)
+            ok = 0;
+    }
+    return ok;
+}
+
+int main()
+{
+    lista l1, l2;
+    init(&l1);
+    init(&l2);
+    adauga(&l1, 1);
+    adauga(&l1, 2);
+    adauga(&l2, 1);
+   /* adauga(&l1, 1);
+    adauga(&l1, 3);
+    adauga(&l2, 7);
+    adauga(&l2, 1);
+    adauga(&l2, 3);
+    adauga(&l2, 7);*/
+    printf("%d", verif(&l1, &l2));
+    return 0;
+}
+#7.6
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct nod {
+    int nr;
+    struct nod * urm;
+}nod;
+
+
+typedef struct{
+    nod * p;
+    nod * u;
+}lista;
+
+
+nod * creare(int n)
+{
+    nod * e = malloc(sizeof(nod));
+    e -> nr = n;
+    e -> urm = NULL;
+    return e;
+}
+
+void init(lista * l)
+{
+    l -> p = NULL;
+    l -> u = NULL;
+}
+
+void adauga(lista * l, int val)
+{
+    nod * e = malloc(sizeof(nod));
+    e -> nr = val;
+    e -> urm = NULL;
+    if(l -> p == NULL)
+    {
+        l -> p = e;
+        l -> u = e;
+    }
+    else
+    {
+        l -> u -> urm = e;
+        l -> u = e;
+    }
+}
+
+void afis(lista * l)
+{
+    nod * it;
+    for(it = l -> p; it != NULL; it = it -> urm)
+        printf("%d\n", it -> nr);
+    printf("\n");
+}
+
+void baga_une_traba(lista * l, nod * e)
+{
+    if(l -> p == NULL)
+    {
+        l -> p = e;
+        l -> u = e;
+    }
+    else if(e -> nr <= l -> p -> nr)
+    {
+        e -> urm = l -> p;
+        l -> p = e;
+    }
+    else if(e -> nr >= l -> u -> nr)
+    {
+        l -> u -> urm = e;
+        l -> u = e;
+    }
+    else
+    {
+        for(nod * i = l -> p; i -> urm != NULL; i = i -> urm)
+        {
+            if(e -> nr >= i -> nr && e -> nr <= i -> urm -> nr)
+            {
+                e -> urm = i -> urm;
+                i -> urm = e;
+                break;
+            }
+        }
+    }
+}
+
+int main()
+{
+    lista l1;
+    init(&l1);
+    baga_une_traba(&l1, creare(11));
+    baga_une_traba(&l1, creare(5));
+    baga_une_traba(&l1, creare(0));
+    baga_une_traba(&l1, creare(12));
+    afis(&l1);
+    return 0;
+}
+#7.7
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct nod {
+    int nr;
+    struct nod * urm;
+}nod;
+
+
+typedef struct{
+    nod * p;
+    nod * u;
+}lista;
+
+
+nod * creare(int n)
+{
+    nod * e = malloc(sizeof(nod));
+    e -> nr = n;
+    e -> urm = NULL;
+    return e;
+}
+
+void init(lista * l)
+{
+    l -> p = NULL;
+    l -> u = NULL;
+}
+
+void adauga(lista * l, int val)
+{
+    nod * e = malloc(sizeof(nod));
+    e -> nr = val;
+    e -> urm = NULL;
+    if(l -> p == NULL)
+    {
+        l -> p = e;
+        l -> u = e;
+    }
+    else
+    {
+        l -> u -> urm = e;
+        l -> u = e;
+    }
+}
+
+void afis(lista * l)
+{
+    nod * it;
+    for(it = l -> p; it != NULL; it = it -> urm)
+        printf("%d\n", it -> nr);
+    printf("\n");
+}
+
+void rez(lista * l, lista * l1, lista * l2)
+{
+    nod * i = l1 -> p;
+    nod * j = l2 -> p;
+    init(l);
+    do
+    {
+        if(i -> nr < j -> nr)
+        {
+            adauga(l, i -> nr);
+            i = i -> urm;
+        }
+        else if(i -> nr > j -> nr)
+        {
+            adauga(l, j -> nr);
+            j = j -> urm;
+        }
+        else
+        {
+            adauga(l, i -> nr);
+            i = i -> urm;
+        }
+    }while(i != NULL && j != NULL);
+    if(i != NULL)
+    {
+        for(nod * it = i; it != NULL; it = it -> urm)
+            adauga(l, it -> nr);
+    }
+    if(j != NULL)
+    {
+        for(nod * it = j; it != NULL; it = it -> urm)
+            adauga(l, it -> nr);
+    }
+}
+
+int main()
+{
+    lista l1, l2, l;
+    init(&l1);
+    init(&l2);
+    adauga(&l1, 1);
+    adauga(&l1, 2);
+    adauga(&l1, 7);
+    adauga(&l1, 8);
+    adauga(&l2, 2);
+    adauga(&l2, 9);
+    rez(&l, &l1, &l2);
+    afis(&l);
+    return 0;
+}
+
