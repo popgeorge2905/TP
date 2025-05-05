@@ -1,0 +1,134 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct nod
+{
+    char c[100];
+    struct nod * urm;
+    struct nod * ant;
+}nod;
+
+typedef struct
+{
+    nod * p;
+    nod * u;
+}propozitie;
+
+void init(propozitie *prop)
+{
+    prop -> p = NULL;
+    prop -> u = NULL;
+}
+
+void display()
+{
+    printf("1. Prop noua\n");
+    printf("2. Afisare\n");
+    printf("3. Sterge cuvant\n");
+    printf("4. Iesire\n");
+}
+
+nod * creare(char * text)
+{
+    nod * e = malloc(sizeof(nod));
+    strcpy(e -> c, text);
+    e -> urm = NULL;
+    e -> ant = NULL;
+    return e;
+}
+
+void adauga(propozitie * prop, nod * e)
+{
+    if(prop -> u == NULL)
+    {
+        prop -> u = e;
+        prop -> p = e;
+    }
+    else
+    {
+        prop -> u -> urm = e;
+        e -> ant = prop -> u;
+        prop -> u = e;
+    }
+}
+
+void citeste(propozitie * prop)
+{
+    getchar();
+    char word[100];
+    fgets(word, 100, stdin);
+    word[strcspn(word, "\n")] = 0;
+    nod * e = creare(word);
+    adauga(prop, e);
+    while(strcmp(word, ".") != 0)
+    {
+        fgets(word, 100, stdin);
+        word[strcspn(word, "\n")] = 0;
+        nod * e = creare(word);
+        adauga(prop, e);
+    }
+    afis(prop);
+}
+
+void afis(propozitie * prop)
+{
+    nod * e;
+    for(e = prop -> p; e != NULL; e = e -> urm)
+        printf("%s ", e -> c);
+    printf("\n");
+}
+void stergere(propozitie * prop, char * text)
+{
+    nod * e;
+    for(e = prop -> p; e != NULL; e = e -> urm)
+        if(strcmp(e -> c, text) == 0)
+    {
+        break;
+    }
+    e -> ant -> urm = e -> urm;
+    e -> urm -> ant = e -> ant;
+    free(e);
+    afis(prop);
+}
+void eliberare(propozitie * prop)
+{
+    nod * prim = prop -> p;
+    nod * prim1 = prop -> p;
+    while(prim != NULL)
+    {
+       prim1 = prim1 -> urm;
+       free(prim);
+       prim = prim1;
+    }
+}
+int main()
+{
+    propozitie prop;
+    init(&prop);
+    display();
+    int op;
+    scanf("%d", &op);
+    while(op != 4)
+    {
+        if(op == 1)
+        {
+            eliberare(&prop);
+            init(&prop);
+            citeste(&prop);
+        }
+        if(op == 2)
+        {
+            afis(&prop);
+        }
+        if(op == 3)
+        {
+            getchar();
+            char word[100];
+            fgets(word, 100, stdin);
+            word[strcspn(word, "\n")] = 0;
+            stergere(&prop, word);
+        }
+        scanf("%d", &op);
+    }
+    return 0;
+}
